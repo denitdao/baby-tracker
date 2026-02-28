@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@theme {
+  --font-heading: var(--font-comfortaa), "Comfortaa", cursive;
+  --font-sans: var(--font-nunito-sans), "Nunito Sans", sans-serif;
+
+  --color-antique: #faf5ee;
+  --color-antique-dark: #f0e8db;
+  --color-teal: #2b9185;
+  --color-teal-dark: #1f7a70;
+  --color-teal-light: #e0f0ed;
+  --color-lavender: #a78bfa;
+  --color-lavender-dark: #8b5cf6;
+  --color-lavender-light: #ede9fe;
+  --color-amber: #fbbf24;
+  --color-amber-light: #fef3c7;
+  --color-sage: #34d399;
+  --color-sage-dark: #059669;
+  --color-sage-light: #d1fae5;
+  --color-charcoal: #1f1f2e;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-surface: #ffffff;
+
+  --animate-fade-in: fade-in 0.5s ease-out both;
+  --animate-slide-up: slide-up 0.5s ease-out both;
+  --animate-slide-in: slide-in 0.35s ease-out both;
+  --animate-scale-in: scale-in 0.3s ease-out both;
+  --animate-bounce-soft: bounce-soft 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  --animate-pulse-soft: pulse-soft 2s ease-in-out infinite;
+  --animate-float: float 3s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce-soft {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: #c5e8e2;
+  color: #1f1f2e;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
