@@ -11,7 +11,6 @@ import {
   QuizDatePicker,
   StepTitle,
   StepSubtitle,
-  ImagePlaceholder,
 } from "~/components/quiz/shared";
 
 /* ================================================================== */

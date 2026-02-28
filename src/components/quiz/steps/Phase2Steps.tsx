@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { type ReactNode } from "react";
 import { useQuiz } from "~/context/QuizContext";
-import { CTAButton, ImagePlaceholder } from "~/components/quiz/shared";
+import { CTAButton } from "~/components/quiz/shared";
 
 /* ------------------------------------------------------------------ */
 /*  Shared problem screen layout                                       */

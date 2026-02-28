@@ -11,6 +11,7 @@ import {
   StepTitle,
   StepSubtitle,
 } from "~/components/quiz/shared";
+import Link from "next/link";
 
 /* ================================================================== */
 /*  Screen 16 — Building Plan (animated loading)                       */
@@ -53,15 +54,15 @@ export function BuildingPlanStep() {
 
   return (
     <div className="space-y-8 py-8 text-center">
-      <h2 className="font-heading text-2xl font-bold text-charcoal md:text-3xl">
+      <h2 className="font-heading text-charcoal text-2xl font-bold md:text-3xl">
         Building {babyDisplayName}&apos;s plan...
       </h2>
 
       {/* Progress bar */}
       <div className="mx-auto max-w-xs">
-        <div className="h-3 overflow-hidden rounded-full bg-border">
+        <div className="bg-border h-3 overflow-hidden rounded-full">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-teal to-lavender transition-all duration-700 ease-out"
+            className="from-teal to-lavender h-full rounded-full bg-gradient-to-r transition-all duration-700 ease-out"
             style={{
               width: `${(currentIdx / LOADING_STEPS.length) * 100}%`,
             }}
@@ -90,20 +91,20 @@ export function BuildingPlanStep() {
               }`}
             >
               {isDone ? (
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sage text-xs text-white">
+                <span className="bg-sage flex h-5 w-5 items-center justify-center rounded-full text-xs text-white">
                   ✓
                 </span>
               ) : i === currentIdx ? (
-                <span className="h-5 w-5 animate-pulse-soft rounded-full bg-amber" />
+                <span className="animate-pulse-soft bg-amber h-5 w-5 rounded-full" />
               ) : (
-                <span className="h-5 w-5 rounded-full bg-border" />
+                <span className="bg-border h-5 w-5 rounded-full" />
               )}
               <span
                 className={
                   isDone
                     ? "text-charcoal"
                     : i === currentIdx
-                      ? "font-medium text-charcoal"
+                      ? "text-charcoal font-medium"
                       : "text-muted"
                 }
               >
@@ -116,7 +117,7 @@ export function BuildingPlanStep() {
 
       {complete && (
         <div className="animate-bounce-soft">
-          <div className="inline-flex items-center gap-2 rounded-full bg-sage-light px-5 py-2.5 font-semibold text-sage-dark">
+          <div className="bg-sage-light text-sage-dark inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-semibold">
             ✅ Your plan is ready!
           </div>
         </div>
@@ -129,75 +130,148 @@ export function BuildingPlanStep() {
 /*  Screen 17 — Results Preview                                        */
 /* ================================================================== */
 
-const SCHEDULE = [
-  { time: "7:00 AM", emoji: "🌅", label: "Wake up" },
-  { time: "7:15 AM", emoji: "🍼", label: "Morning feed" },
-  { time: "9:00 AM", emoji: "😴", label: "Nap 1 (1.5 hrs)" },
-  { time: "10:45 AM", emoji: "🍼", label: "Feed" },
-  { time: "11:30 AM", emoji: "🎯", label: "Activity time (milestone practice)" },
-  { time: "12:30 PM", emoji: "😴", label: "Nap 2 (1 hr)" },
-  { time: "2:00 PM", emoji: "🍼", label: "Afternoon feed" },
-  { time: "3:30 PM", emoji: "🎨", label: "Playtime & sensory" },
-  { time: "4:30 PM", emoji: "😴", label: "Nap 3 (45 min)" },
-  { time: "5:30 PM", emoji: "🍼", label: "Evening feed" },
-  { time: "6:30 PM", emoji: "🛁", label: "Bath & wind-down" },
-  { time: "7:00 PM", emoji: "🌙", label: "Bedtime routine" },
+type ScheduleCategory = "wake" | "sleep" | "feed" | "activity" | "wind-down";
+
+const CATEGORY_STYLES: Record<ScheduleCategory, { bg: string; dot: string }> = {
+  wake: { bg: "bg-amber-light/60", dot: "bg-amber" },
+  sleep: { bg: "bg-lavender-light/60", dot: "bg-lavender" },
+  feed: { bg: "bg-teal-light/60", dot: "bg-teal" },
+  activity: { bg: "bg-sage-light/60", dot: "bg-sage" },
+  "wind-down": { bg: "bg-lavender-light/40", dot: "bg-lavender-dark" },
+};
+
+const SCHEDULE: {
+  time: string;
+  emoji: string;
+  label: string;
+  cat: ScheduleCategory;
+}[] = [
+  { time: "7:00 AM", emoji: "🌅", label: "Wake up", cat: "wake" },
+  { time: "7:15 AM", emoji: "🍼", label: "Morning feed", cat: "feed" },
+  { time: "9:00 AM", emoji: "😴", label: "Nap 1 (1.5 hrs)", cat: "sleep" },
+  { time: "10:45 AM", emoji: "🍼", label: "Feed", cat: "feed" },
+  {
+    time: "11:30 AM",
+    emoji: "🎯",
+    label: "Activity time (milestone practice)",
+    cat: "activity",
+  },
+  { time: "12:30 PM", emoji: "😴", label: "Nap 2 (1 hr)", cat: "sleep" },
+  { time: "2:00 PM", emoji: "🍼", label: "Afternoon feed", cat: "feed" },
+  {
+    time: "3:30 PM",
+    emoji: "🎨",
+    label: "Playtime & sensory",
+    cat: "activity",
+  },
+  { time: "4:30 PM", emoji: "😴", label: "Nap 3 (45 min)", cat: "sleep" },
+  { time: "5:30 PM", emoji: "🍼", label: "Evening feed", cat: "feed" },
+  { time: "6:30 PM", emoji: "🛁", label: "Bath & wind-down", cat: "wind-down" },
+  { time: "7:00 PM", emoji: "🌙", label: "Bedtime routine", cat: "wind-down" },
 ];
 
-const VISIBLE_COUNT = 3;
+const VISIBLE_COUNT = 4;
 
 export function ResultsPreviewStep() {
   const { nextStep, babyDisplayName, babyAge } = useQuiz();
 
   return (
-    <div className="space-y-6">
-      <div>
-        <StepTitle>
-          {babyDisplayName}&apos;s Optimized Daily Routine
-        </StepTitle>
+    <div className="space-y-5">
+      {/* Header */}
+      <div className="text-center">
+        <div className="animate-bounce-soft bg-lavender-light mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full text-3xl">
+          📋
+        </div>
+        <StepTitle>{babyDisplayName}&apos;s Optimized Daily Routine</StepTitle>
         {babyAge && (
-          <div className="mt-2 inline-block rounded-full bg-lavender-light px-3 py-1 text-sm font-medium text-lavender-dark">
-            Based on {babyAge.label} · Ideal bedtime: 6:30–7:30 PM
+          <div className="bg-lavender-light/60 mt-3 inline-flex items-center gap-2 rounded-full px-4 py-1.5">
+            <span className="text-lavender-dark text-xs font-semibold">
+              {babyAge.label}
+            </span>
+            <span className="bg-lavender/30 h-3 w-px" />
+            <span className="text-lavender-dark text-xs font-semibold">
+              Ideal bedtime 6:30–7:30 PM
+            </span>
           </div>
         )}
       </div>
 
-      {/* Schedule timeline */}
-      <div className="relative">
-        <div className="space-y-2">
-          {SCHEDULE.map((item, i) => (
-            <div
-              key={i}
-              className={`flex items-center gap-3 rounded-xl border border-border bg-surface p-3 ${
-                i < VISIBLE_COUNT ? "animate-slide-up" : ""
-              }`}
-              style={
-                i < VISIBLE_COUNT
-                  ? { animationDelay: `${i * 0.1}s` }
-                  : undefined
-              }
-            >
-              <span className="text-lg">{item.emoji}</span>
-              <span className="min-w-[72px] text-sm font-bold text-teal">
-                {item.time}
-              </span>
-              <span className="text-charcoal">{item.label}</span>
-            </div>
-          ))}
+      {/* Timeline */}
+      <div className="border-border bg-surface relative rounded-2xl border p-4">
+        {/* Vertical timeline line */}
+        <div className="bg-border absolute top-4 bottom-4 left-[29px] w-0.5" />
+
+        <div className="relative space-y-1">
+          {SCHEDULE.map((item, i) => {
+            const styles = CATEGORY_STYLES[item.cat];
+            const isVisible = i < VISIBLE_COUNT;
+
+            return (
+              <div
+                key={i}
+                className={`relative flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all ${
+                  isVisible ? `${styles.bg} animate-slide-up` : "bg-transparent"
+                }`}
+                style={
+                  isVisible ? { animationDelay: `${i * 0.12}s` } : undefined
+                }
+              >
+                {/* Timeline dot */}
+                <div className="relative z-10 flex h-4 w-4 shrink-0 items-center justify-center">
+                  <div
+                    className={`h-2.5 w-2.5 rounded-full ${isVisible ? styles.dot : "bg-border"}`}
+                  />
+                </div>
+
+                {/* Time */}
+                <span className="text-charcoal/50 min-w-[64px] text-xs font-bold tabular-nums">
+                  {item.time}
+                </span>
+
+                {/* Emoji + label */}
+                <span className="text-base">{item.emoji}</span>
+                <span className="text-charcoal text-sm font-medium">
+                  {item.label}
+                </span>
+              </div>
+            );
+          })}
         </div>
 
         {/* Blur overlay */}
-        <div className="absolute bottom-0 left-0 right-0 top-[160px] flex items-center justify-center bg-gradient-to-b from-transparent via-antique/80 to-antique">
-          <div className="rounded-2xl bg-surface p-6 text-center shadow-xl shadow-charcoal/5">
-            <div className="mb-2 text-3xl">🔒</div>
-            <p className="font-heading font-bold text-charcoal">
+        <div className="from-surface/0 via-surface/90 to-surface absolute inset-x-0 top-[180px] bottom-0 flex items-center justify-center rounded-b-2xl bg-gradient-to-b">
+          <div className="text-center">
+            <div className="bg-teal-light/60 mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full text-xl">
+              🔒
+            </div>
+            <p className="font-heading text-charcoal text-base font-bold">
               Unlock {babyDisplayName}&apos;s full routine
             </p>
-            <p className="mt-1 text-sm text-muted">
-              {SCHEDULE.length - VISIBLE_COUNT} more activities planned
+            <p className="text-muted mt-1 text-xs">
+              {SCHEDULE.length - VISIBLE_COUNT} more activities planned for the
+              day
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Legend */}
+      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5">
+        {(
+          [
+            ["sleep", "Sleep"],
+            ["feed", "Feeding"],
+            ["activity", "Activity"],
+            ["wind-down", "Wind-down"],
+          ] as const
+        ).map(([cat, label]) => (
+          <div key={cat} className="flex items-center gap-1.5">
+            <div
+              className={`h-2 w-2 rounded-full ${CATEGORY_STYLES[cat].dot}`}
+            />
+            <span className="text-muted text-[11px]">{label}</span>
+          </div>
+        ))}
       </div>
 
       <CTAButton onClick={nextStep}>See full plan →</CTAButton>
@@ -217,8 +291,7 @@ const TESTIMONIALS = [
     detail: "mom of 6-month-old",
   },
   {
-    quote:
-      "I stopped second-guessing everything. The routine just works.",
+    quote: "I stopped second-guessing everything. The routine just works.",
     author: "James",
     detail: "first-time dad",
   },
@@ -238,8 +311,11 @@ export function SocialProofStep() {
     <div className="space-y-6">
       <div className="text-center">
         <StepTitle>
-          Join {parentCount.toLocaleString()}+ parents already using
-          personalized routines
+          Join{" "}
+          <span className="inline-block w-[5.5ch] text-right tabular-nums">
+            {parentCount.toLocaleString()}
+          </span>
+          + parents already using personalized routines
         </StepTitle>
       </div>
 
@@ -247,25 +323,24 @@ export function SocialProofStep() {
         {TESTIMONIALS.map((t, i) => (
           <div
             key={i}
-            className="animate-slide-up rounded-2xl border border-border bg-surface p-5"
+            className="animate-slide-up border-border bg-surface rounded-2xl border p-5"
             style={{ animationDelay: `${i * 0.15}s` }}
           >
-            <div className="mb-2 text-amber">⭐⭐⭐⭐⭐</div>
-            <p className="leading-relaxed text-charcoal">
+            <div className="text-amber mb-2">⭐⭐⭐⭐⭐</div>
+            <p className="text-charcoal leading-relaxed">
               &ldquo;{t.quote}&rdquo;
             </p>
-            <p className="mt-3 text-sm text-muted">
-              — {t.author},{" "}
-              <span className="italic">{t.detail}</span>
+            <p className="text-muted mt-3 text-sm">
+              — {t.author}, <span className="italic">{t.detail}</span>
             </p>
           </div>
         ))}
       </div>
 
-      <div className="flex items-center justify-center gap-2 rounded-xl bg-amber-light/50 p-3">
+      <div className="bg-amber-light/50 flex items-center justify-center gap-2 rounded-xl p-3">
         <span className="text-lg">⭐</span>
-        <span className="font-semibold text-charcoal">4.8 rating</span>
-        <span className="text-sm text-muted">on the App Store</span>
+        <span className="text-charcoal font-semibold">4.8 rating</span>
+        <span className="text-muted text-sm">on the App Store</span>
       </div>
 
       <CTAButton onClick={nextStep}>Get my plan →</CTAButton>
@@ -293,7 +368,7 @@ export function EmailCaptureStep() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-light text-3xl">
+        <div className="bg-teal-light mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl text-3xl">
           📧
         </div>
         <StepTitle>
@@ -318,7 +393,7 @@ export function EmailCaptureStep() {
         Send my plan
       </CTAButton>
 
-      <p className="text-center text-xs text-muted">
+      <p className="text-muted text-center text-xs">
         🔒 No spam, ever. Unsubscribe anytime.
       </p>
     </div>
@@ -330,144 +405,148 @@ export function EmailCaptureStep() {
 /* ================================================================== */
 
 export function PaywallStep() {
-  const { answers, setAnswer, nextStep, babyDisplayName, babyAge } = useQuiz();
+  const { answers, setAnswer, nextStep, babyDisplayName } = useQuiz();
   const planToastFired = useRef(false);
-  const ageRange = babyAge
-    ? `${babyAge.months}–${babyAge.months + 3} months`
-    : "your baby's stage";
 
-  const features = [
-    `${babyDisplayName}'s full personalized routine`,
-    "Smart sleep & feeding tracker",
-    `Weekly milestone alerts for ${ageRange}`,
-    `Expert tips personalized to ${babyDisplayName}'s stage`,
-    "Push reminders (never miss a nap window)",
-    "Weekly progress reports",
-  ];
+  const selectPlan = (plan: "monthly" | "yearly") => {
+    setAnswer("selectedPlan", plan);
+    if (!planToastFired.current) {
+      planToastFired.current = true;
+      showAchievement({
+        emoji: "✨",
+        title: "Great choice!",
+        description: `Best value for ${babyDisplayName}'s growth`,
+        variant: "teal",
+      });
+    }
+  };
+
+  const isYearly = answers.selectedPlan === "yearly";
 
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <StepTitle>
-          Start {babyDisplayName}&apos;s personalized routine today
-        </StepTitle>
-      </div>
-
-      {/* Trial timeline */}
-      <div className="flex items-center justify-between rounded-2xl bg-sage-light/40 p-4">
-        <div className="text-center">
-          <div className="text-sm font-bold text-sage-dark">Day 1</div>
-          <div className="text-xs text-muted">Full access</div>
+    <div className="flex flex-col items-center">
+      {/* Hero */}
+      <div className="relative mt-2 mb-6">
+        <div className="bg-teal-light mx-auto flex h-28 w-28 items-center justify-center rounded-full text-6xl">
+          🌙
         </div>
-        <div className="mx-2 h-px flex-1 bg-sage/30" />
-        <div className="text-center">
-          <div className="text-sm font-bold text-amber">Day 5</div>
-          <div className="text-xs text-muted">Reminder</div>
-        </div>
-        <div className="mx-2 h-px flex-1 bg-sage/30" />
-        <div className="text-center">
-          <div className="text-sm font-bold text-muted">Day 7</div>
-          <div className="text-xs text-muted">Trial ends</div>
-        </div>
-      </div>
-
-      <p className="text-center text-sm font-medium text-sage-dark">
-        You won&apos;t be charged during the free trial
-      </p>
-
-      {/* Plan cards */}
-      <div className="grid grid-cols-2 gap-3">
-        {/* Monthly */}
-        <button
-          type="button"
-          onClick={() => {
-            setAnswer("selectedPlan", "monthly");
-            if (!planToastFired.current) {
-              planToastFired.current = true;
-              showAchievement({
-                emoji: "✨",
-                title: "Great choice!",
-                description: `Best value for ${babyDisplayName}'s growth`,
-                variant: "teal",
-              });
-            }
-          }}
-          className={`rounded-2xl border-2 p-4 text-left transition-all ${
-            answers.selectedPlan === "monthly"
-              ? "border-teal bg-teal-light/30"
-              : "border-border bg-surface hover:border-teal/30"
-          }`}
+        <span className="animate-pulse-soft absolute top-2 -right-2 text-xl">
+          ✨
+        </span>
+        <span
+          className="animate-pulse-soft absolute bottom-4 -left-3 text-lg"
+          style={{ animationDelay: "0.5s" }}
         >
-          <div className="text-xs font-medium text-muted">Flexible</div>
-          <div className="mt-1 text-xl font-bold text-charcoal">$12.99</div>
-          <div className="text-xs text-muted">/month</div>
-          <div className="mt-2 rounded-full bg-border px-2 py-0.5 text-center text-xs font-medium text-muted">
-            $3.25/week
-          </div>
-          <div className="mt-2 text-xs text-muted">7 days free</div>
-        </button>
+          ✨
+        </span>
+      </div>
 
+      {/* Headline */}
+      <h2 className="font-heading text-charcoal mb-8 text-center text-2xl leading-tight font-bold md:text-3xl">
+        Get started with a <span className="text-teal">7 day free trial</span>{" "}
+        on Petite Care
+      </h2>
+
+      {/* Plan cards — stacked */}
+      <div className="mb-6 w-full space-y-3">
         {/* Yearly */}
         <button
           type="button"
-          onClick={() => {
-            setAnswer("selectedPlan", "yearly");
-            if (!planToastFired.current) {
-              planToastFired.current = true;
-              showAchievement({
-                emoji: "✨",
-                title: "Great choice!",
-                description: `Best value for ${babyDisplayName}'s growth`,
-                variant: "teal",
-              });
-            }
-          }}
-          className={`relative rounded-2xl border-2 p-4 text-left transition-all ${
-            answers.selectedPlan === "yearly"
-              ? "border-teal bg-teal-light/30 shadow-md shadow-teal/10"
-              : "border-border bg-surface hover:border-teal/30"
+          onClick={() => selectPlan("yearly")}
+          className={`relative flex w-full items-center rounded-2xl border-2 px-5 py-4 text-left transition-all duration-200 ${
+            isYearly
+              ? "border-teal bg-teal-light/25 shadow-teal/15 shadow-lg"
+              : "border-border bg-surface hover:border-teal/40"
           }`}
         >
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-teal px-3 py-0.5 text-xs font-bold text-white">
-            BEST VALUE
+          {isYearly && (
+            <div className="bg-teal shadow-teal/25 absolute -top-2.5 -left-2.5 flex h-7 w-7 items-center justify-center rounded-full text-white shadow-md">
+              <svg width="14" height="11" viewBox="0 0 10 8" fill="none">
+                <path
+                  d="M1 4L3.5 6.5L9 1"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          )}
+          {/* Badge */}
+          <div className="bg-amber text-charcoal absolute -top-2.5 right-4 rounded-full px-2.5 py-0.5 text-[10px] font-bold tracking-wider uppercase shadow-sm">
+            Most popular
           </div>
-          <div className="text-xs font-medium text-teal">Save 62%</div>
-          <div className="mt-1 text-xl font-bold text-charcoal">$59.99</div>
-          <div className="text-xs text-muted">/year</div>
-          <div className="mt-2 rounded-full bg-teal-light px-2 py-0.5 text-center text-xs font-bold text-teal">
-            $1.15/week
+          <div className="flex-1">
+            <div className="text-charcoal text-lg font-bold">Individual</div>
+            <div className="text-muted mt-0.5 text-sm">
+              12 mo &middot; $59.99
+            </div>
           </div>
-          <div className="mt-2 text-xs text-muted">7 days free</div>
+          <div className="text-right">
+            <span className="text-charcoal text-xl font-bold">$4.99</span>
+            <span className="text-muted text-sm"> / MO</span>
+          </div>
+        </button>
+
+        {/* Monthly */}
+        <button
+          type="button"
+          onClick={() => selectPlan("monthly")}
+          className={`relative flex w-full items-center rounded-2xl border-2 px-5 py-4 text-left transition-all duration-200 ${
+            !isYearly
+              ? "border-teal bg-teal-light/25 shadow-teal/15 shadow-lg"
+              : "border-border bg-surface hover:border-teal/40"
+          }`}
+        >
+          {!isYearly && (
+            <div className="bg-teal shadow-teal/25 absolute -top-2.5 -left-2.5 flex h-7 w-7 items-center justify-center rounded-full text-white shadow-md">
+              <svg width="14" height="11" viewBox="0 0 10 8" fill="none">
+                <path
+                  d="M1 4L3.5 6.5L9 1"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          )}
+          <div className="flex-1">
+            <div className="text-charcoal text-lg font-bold">Monthly</div>
+            <div className="text-muted mt-0.5 text-sm">
+              1 mo &middot; $12.99
+            </div>
+          </div>
+          <div className="text-right">
+            <span className="text-charcoal text-xl font-bold">$12.99</span>
+            <span className="text-muted text-sm"> / MO</span>
+          </div>
         </button>
       </div>
 
-      {/* Features list */}
-      <div className="space-y-2.5">
-        <p className="text-sm font-semibold text-charcoal">
-          What&apos;s included:
-        </p>
-        {features.map((f, i) => (
-          <div key={i} className="flex items-start gap-2">
-            <span className="mt-0.5 text-sage">✓</span>
-            <span className="text-sm text-charcoal/80">{f}</span>
-          </div>
-        ))}
+      {/* Cancel note */}
+      <p className="text-muted mb-6 text-center text-sm">
+        Cancel anytime in the App Store
+      </p>
+
+      {/* CTA */}
+      <div className="w-full">
+        <CTAButton onClick={nextStep}>START MY FREE WEEK</CTAButton>
       </div>
 
-      <CTAButton onClick={nextStep}>Start My Free 7-Day Trial</CTAButton>
-
-      <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-muted">
-        <span>🔒 Cancel anytime</span>
-        <span>·</span>
-        <span>💰 Money-back guarantee</span>
-        <span>·</span>
-        <span>No charge for 7 days</span>
-      </div>
+      {/* Legal */}
+      <p className="text-muted/70 mt-5 px-2 text-center text-[10px] leading-relaxed">
+        Your monthly or annual subscription{" "}
+        <strong className="text-muted">automatically renews</strong> for the
+        same term unless cancelled at least 24 hours prior to the end of the
+        current term. Cancel any time in the App Store at no additional cost;
+        your subscription will then cease at the end of the current term.
+      </p>
 
       <button
         type="button"
         onClick={nextStep}
-        className="w-full text-center text-xs text-muted hover:text-teal"
+        className="text-muted/50 hover:text-teal mt-4 w-full text-center text-xs transition-colors"
       >
         Continue with limited free version →
       </button>
@@ -491,40 +570,63 @@ export function SuccessStep() {
   return (
     <div className="space-y-8 py-4 text-center">
       <div className="animate-bounce-soft">
-        <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-sage-light text-5xl">
+        <div className="bg-sage-light mx-auto flex h-24 w-24 items-center justify-center rounded-full text-5xl">
           🎉
         </div>
       </div>
 
       <div>
-        <h2 className="font-heading text-3xl font-bold text-charcoal">
+        <h2 className="font-heading text-charcoal text-3xl font-bold">
           Welcome to the family, {parentDisplayName}!
         </h2>
-        <p className="mt-2 text-muted">
+        <p className="text-muted mt-2">
           {babyDisplayName}&apos;s routine plan is ready. Download the app to
           get started.
         </p>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-        <button
-          type="button"
-          className="flex items-center justify-center gap-2 rounded-xl bg-charcoal px-6 py-3.5 font-semibold text-white transition-all hover:bg-charcoal/80"
+        {/* App Store */}
+        <a
+          href="#"
+          className="bg-charcoal hover:bg-charcoal/85 inline-flex items-center gap-3 rounded-xl px-5 py-3 transition-all"
         >
-          🍎 App Store
-        </button>
-        <button
-          type="button"
-          className="flex items-center justify-center gap-2 rounded-xl bg-charcoal px-6 py-3.5 font-semibold text-white transition-all hover:bg-charcoal/80"
+          <svg viewBox="0 0 24 24" className="h-7 w-7 fill-white">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+          </svg>
+          <div className="text-left">
+            <div className="text-[10px] leading-none text-white/70">
+              Download on the
+            </div>
+            <div className="text-base leading-tight font-semibold text-white">
+              App Store
+            </div>
+          </div>
+        </a>
+
+        {/* Google Play */}
+        <a
+          href="#"
+          className="bg-charcoal hover:bg-charcoal/85 inline-flex items-center gap-3 rounded-xl px-5 py-3 transition-all"
         >
-          ▶️ Google Play
-        </button>
+          <svg viewBox="0 0 24 24" className="h-7 w-7 fill-white">
+            <path d="M3.18 23.54c-.36-.17-.59-.52-.59-.92V1.38c0-.4.23-.75.59-.92l11.68 11.54L3.18 23.54zM15.86 16.5l-2.69-2.66 8.52-4.75c.56-.31.56-1.08 0-1.39l-8.52-4.75 2.69-2.66 10.14 5.65c1.12.62 1.12 2.28 0 2.91L15.86 16.5zM13.17 11.96L5.1 3.77l10.48 5.84-2.41 2.35zM5.1 20.23l8.07-8.19 2.41 2.35L5.1 20.23z" />
+          </svg>
+          <div className="text-left">
+            <div className="text-[10px] leading-none text-white/70">
+              Get it on
+            </div>
+            <div className="text-base leading-tight font-semibold text-white">
+              Google Play
+            </div>
+          </div>
+        </a>
       </div>
 
       {answers.email && (
-        <p className="text-sm text-muted">
+        <p className="text-muted text-sm">
           Your subscription is already active — just sign in with{" "}
-          <span className="font-medium text-charcoal">{answers.email}</span>
+          <span className="text-charcoal font-medium">{answers.email}</span>
         </p>
       )}
 
@@ -544,12 +646,6 @@ export function ThankYouStep() {
 
   const links = [
     {
-      emoji: "📱",
-      bg: "bg-teal-light",
-      title: "Download the app",
-      subtitle: "Available on iOS and Android",
-    },
-    {
       emoji: "📖",
       bg: "bg-lavender-light",
       title: "5 signs your baby's sleep schedule needs adjusting",
@@ -566,29 +662,68 @@ export function ThankYouStep() {
   return (
     <div className="space-y-8 py-4 text-center">
       <div>
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-light text-3xl">
+        <div className="bg-teal-light mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl text-3xl">
           💌
         </div>
-        <h2 className="font-heading text-2xl font-bold text-charcoal md:text-3xl">
+        <h2 className="font-heading text-charcoal text-2xl font-bold md:text-3xl">
           Check your email!
         </h2>
-        <p className="mt-2 text-muted">
+        <p className="text-muted mt-2">
           We just sent {babyDisplayName}&apos;s routine overview to{" "}
-          <span className="font-medium text-charcoal">
+          <span className="text-charcoal font-medium">
             {answers.email || "your email"}
           </span>
         </p>
       </div>
 
+      <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+        <a
+          href="#"
+          className="bg-charcoal hover:bg-charcoal/85 inline-flex items-center gap-3 rounded-xl px-5 py-3 transition-all"
+        >
+          <svg viewBox="0 0 24 24" className="h-7 w-7 fill-white">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+          </svg>
+          <div className="text-left">
+            <div className="text-[10px] leading-none text-white/70">
+              Download on the
+            </div>
+            <div className="text-base leading-tight font-semibold text-white">
+              App Store
+            </div>
+          </div>
+        </a>
+
+        <a
+          href="#"
+          className="bg-charcoal hover:bg-charcoal/85 inline-flex items-center gap-3 rounded-xl px-5 py-3 transition-all"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo-google-playstore.svg"
+            alt="Google Play"
+            className="h-7 w-7 brightness-0 invert"
+          />
+          <div className="text-left">
+            <div className="text-[10px] leading-none text-white/70">
+              Get it on
+            </div>
+            <div className="text-base leading-tight font-semibold text-white">
+              Google Play
+            </div>
+          </div>
+        </a>
+      </div>
+
       <div className="space-y-3 text-left">
-        <p className="text-center text-sm font-semibold text-charcoal">
+        <p className="text-charcoal text-center text-sm font-semibold">
           While you wait:
         </p>
         {links.map((link, i) => (
           <a
             key={i}
             href="#"
-            className="flex items-center gap-3 rounded-xl border border-border bg-surface p-4 transition-all hover:border-teal/30 hover:shadow-sm"
+            className="border-border bg-surface hover:border-teal/30 flex items-center gap-3 rounded-xl border p-4 transition-all hover:shadow-sm"
           >
             <span
               className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg ${link.bg}`}
@@ -596,17 +731,17 @@ export function ThankYouStep() {
               {link.emoji}
             </span>
             <div className="min-w-0">
-              <div className="font-semibold text-charcoal">{link.title}</div>
-              <div className="text-sm text-muted">{link.subtitle}</div>
+              <div className="text-charcoal font-semibold">{link.title}</div>
+              <div className="text-muted text-sm">{link.subtitle}</div>
             </div>
           </a>
         ))}
       </div>
 
-      <div className="pt-4 text-sm text-muted">
-        <div className="font-heading font-bold text-charcoal">
+      <div className="text-muted pt-4 text-sm">
+        <Link href="/" className="font-heading text-charcoal font-bold">
           Petite <span className="text-teal">Care</span>
-        </div>
+        </Link>
         <p className="mt-1">
           Thank you for trusting us with your family&apos;s routine 💛
         </p>

@@ -7,7 +7,7 @@ const BRAND_COLORS = ["#2b9185", "#a78bfa", "#fbbf24", "#34d399", "#faf5ee"];
 
 export function useConfetti() {
   const burst = useCallback(() => {
-    confetti({
+    void confetti({
       particleCount: 80,
       spread: 70,
       origin: { y: 0.6 },
@@ -28,15 +28,15 @@ export function useConfetti() {
       scalar: 1.05,
     };
 
-    confetti({ ...defaults, angle: 60, origin: { x: 0, y: 0.65 } });
-    confetti({ ...defaults, angle: 120, origin: { x: 1, y: 0.65 } });
+    void confetti({ ...defaults, angle: 60, origin: { x: 0, y: 0.65 } });
+    void confetti({ ...defaults, angle: 120, origin: { x: 1, y: 0.65 } });
   }, []);
 
   const shower = useCallback(() => {
     const end = Date.now() + 2200;
 
     function frame() {
-      confetti({
+      void confetti({
         particleCount: 3,
         angle: 60,
         spread: 55,
@@ -44,7 +44,7 @@ export function useConfetti() {
         colors: BRAND_COLORS,
         ticks: 200,
       });
-      confetti({
+      void confetti({
         particleCount: 3,
         angle: 120,
         spread: 55,

@@ -10,7 +10,7 @@ export function useCountUp(target: number, duration = 1500) {
     let raf: number;
 
     function tick(now: number) {
-      if (startTime.current === null) startTime.current = now;
+      startTime.current ??= now;
       const elapsed = now - startTime.current;
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
