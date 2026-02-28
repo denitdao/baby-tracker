@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useQuiz } from "~/context/QuizContext";
+import { useConfetti } from "~/hooks/useConfetti";
+import { useCountUp } from "~/hooks/useCountUp";
+import { showAchievement } from "~/components/quiz/AchievementToast";
 import {
   CTAButton,
   QuizInput,
@@ -25,6 +28,7 @@ export function BuildingPlanStep() {
   const { nextStep, babyDisplayName } = useQuiz();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [complete, setComplete] = useState(false);
+  const { sideCannons } = useConfetti();
 
   const advance = useCallback(() => nextStep(), [nextStep]);
 
@@ -36,11 +40,16 @@ export function BuildingPlanStep() {
     });
 
     const doneAt = LOADING_STEPS.length * 800 + 500;
-    timers.push(setTimeout(() => setComplete(true), doneAt));
+    timers.push(
+      setTimeout(() => {
+        setComplete(true);
+        sideCannons();
+      }, doneAt),
+    );
     timers.push(setTimeout(advance, doneAt + 1000));
 
     return () => timers.forEach(clearTimeout);
-  }, [advance]);
+  }, [advance, sideCannons]);
 
   return (
     <div className="space-y-8 py-8 text-center">
@@ -223,12 +232,14 @@ const TESTIMONIALS = [
 
 export function SocialProofStep() {
   const { nextStep } = useQuiz();
+  const parentCount = useCountUp(50000, 1800);
 
   return (
     <div className="space-y-6">
       <div className="text-center">
         <StepTitle>
-          Join 50,000+ parents already using personalized routines
+          Join {parentCount.toLocaleString()}+ parents already using
+          personalized routines
         </StepTitle>
       </div>
 
@@ -320,6 +331,7 @@ export function EmailCaptureStep() {
 
 export function PaywallStep() {
   const { answers, setAnswer, nextStep, babyDisplayName, babyAge } = useQuiz();
+  const planToastFired = useRef(false);
   const ageRange = babyAge
     ? `${babyAge.months}–${babyAge.months + 3} months`
     : "your baby's stage";
@@ -368,7 +380,18 @@ export function PaywallStep() {
         {/* Monthly */}
         <button
           type="button"
-          onClick={() => setAnswer("selectedPlan", "monthly")}
+          onClick={() => {
+            setAnswer("selectedPlan", "monthly");
+            if (!planToastFired.current) {
+              planToastFired.current = true;
+              showAchievement({
+                emoji: "✨",
+                title: "Great choice!",
+                description: `Best value for ${babyDisplayName}'s growth`,
+                variant: "teal",
+              });
+            }
+          }}
           className={`rounded-2xl border-2 p-4 text-left transition-all ${
             answers.selectedPlan === "monthly"
               ? "border-teal bg-teal-light/30"
@@ -387,7 +410,18 @@ export function PaywallStep() {
         {/* Yearly */}
         <button
           type="button"
-          onClick={() => setAnswer("selectedPlan", "yearly")}
+          onClick={() => {
+            setAnswer("selectedPlan", "yearly");
+            if (!planToastFired.current) {
+              planToastFired.current = true;
+              showAchievement({
+                emoji: "✨",
+                title: "Great choice!",
+                description: `Best value for ${babyDisplayName}'s growth`,
+                variant: "teal",
+              });
+            }
+          }}
           className={`relative rounded-2xl border-2 p-4 text-left transition-all ${
             answers.selectedPlan === "yearly"
               ? "border-teal bg-teal-light/30 shadow-md shadow-teal/10"
@@ -447,6 +481,12 @@ export function PaywallStep() {
 
 export function SuccessStep() {
   const { nextStep, parentDisplayName, babyDisplayName, answers } = useQuiz();
+  const { shower } = useConfetti();
+
+  useEffect(() => {
+    const t = setTimeout(shower, 300);
+    return () => clearTimeout(t);
+  }, [shower]);
 
   return (
     <div className="space-y-8 py-4 text-center">

@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import { useQuiz } from "~/context/QuizContext";
+import { useConfetti } from "~/hooks/useConfetti";
 import {
   OptionCard,
   CTAButton,
@@ -242,6 +244,42 @@ export function FirstBornStep() {
 }
 
 /* ================================================================== */
+/*  Screen 5b — Baby's Gender                                          */
+/* ================================================================== */
+
+const GENDER_OPTIONS = [
+  { id: "boy", emoji: "👦", label: "Boy" },
+  { id: "girl", emoji: "👧", label: "Girl" },
+  { id: "prefer-not", emoji: "🤍", label: "Prefer not to say" },
+];
+
+export function BabyGenderStep() {
+  const { answers, setAnswer, nextStep, babyDisplayName } = useQuiz();
+
+  return (
+    <div className="space-y-6">
+      <StepTitle>Is {babyDisplayName} a boy or a girl?</StepTitle>
+
+      <div className="space-y-3">
+        {GENDER_OPTIONS.map((opt) => (
+          <OptionCard
+            key={opt.id}
+            emoji={opt.emoji}
+            label={opt.label}
+            selected={answers.babyGender === opt.id}
+            onClick={() => setAnswer("babyGender", opt.id)}
+          />
+        ))}
+      </div>
+
+      <CTAButton onClick={nextStep} disabled={!answers.babyGender}>
+        Next
+      </CTAButton>
+    </div>
+  );
+}
+
+/* ================================================================== */
 /*  Screen 6 — Caregiver Role                                          */
 /* ================================================================== */
 
@@ -323,8 +361,14 @@ export function ParentNameStep() {
 
 export function AffirmationStep() {
   const { answers, nextStep } = useQuiz();
+  const { burst } = useConfetti();
   const parentName = answers.parentName || "You";
   const babyName = answers.babyName || "Baby";
+
+  useEffect(() => {
+    const t = setTimeout(burst, 400);
+    return () => clearTimeout(t);
+  }, [burst]);
 
   return (
     <div className="space-y-8 text-center">
@@ -341,12 +385,12 @@ export function AffirmationStep() {
         <p className="mt-1 font-heading text-xl text-teal">What a team!</p>
       </div>
 
-      <ImagePlaceholder
-        emoji="👨‍👩‍👦"
-        label="Team illustration"
-        description="Parent + baby mascot together"
-        aspectRatio="aspect-[3/2]"
-        className="mx-auto max-w-[280px]"
+      <Image
+        src="/team-mascot.png"
+        alt="Parent and baby together"
+        width={280}
+        height={187}
+        className="mx-auto"
       />
 
       <p className="text-muted">
@@ -413,7 +457,7 @@ export function GoalsStep() {
         <StepSubtitle>Select all that apply</StepSubtitle>
       </div>
 
-      <div className="grid gap-2.5 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-2.5">
         {options.map((opt, i) => (
           <div
             key={opt.id}

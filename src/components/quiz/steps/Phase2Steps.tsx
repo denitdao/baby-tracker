@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { type ReactNode } from "react";
 import { useQuiz } from "~/context/QuizContext";
 import { CTAButton, ImagePlaceholder } from "~/components/quiz/shared";
@@ -49,11 +50,12 @@ export function ProblemSleepStep() {
       title="Babies don't sleep like adults"
       onNext={nextStep}
     >
-      <ImagePlaceholder
-        emoji="📊"
-        label="Sleep pressure wave visualization"
-        description="Adult smooth sine wave vs baby's jagged pattern"
-        aspectRatio="aspect-[16/9]"
+      <Image
+        src="/sleep-pressure.png"
+        alt="Sleep pressure: adult vs baby comparison"
+        width={560}
+        height={315}
+        className="w-full rounded-2xl"
       />
 
       <div className="rounded-2xl bg-lavender-light/50 p-5">
@@ -83,11 +85,12 @@ export function ProblemFeedingStep() {
       title="Feeding isn't just about hunger"
       onNext={nextStep}
     >
-      <ImagePlaceholder
-        emoji="🕐"
-        label="24-hour feeding clock visualization"
-        description="Circular clock showing feeding-sleep-energy connections"
-        aspectRatio="aspect-[16/9]"
+      <Image
+        src="/feeding-clock.png"
+        alt="24-hour feeding and sleep cycle"
+        width={560}
+        height={315}
+        className="w-full rounded-2xl"
       />
 
       <div className="rounded-2xl bg-amber-light/50 p-5">
@@ -115,11 +118,12 @@ export function ProblemDevelopmentStep() {
       title="Every baby develops at their own pace — but milestones still matter"
       onNext={nextStep}
     >
-      <ImagePlaceholder
-        emoji="📈"
-        label="Milestone timeline visualization"
-        description="Expected vs actual milestone windows with normal range"
-        aspectRatio="aspect-[16/9]"
+      <Image
+        src="/milestones.png"
+        alt="Baby development milestone timeline"
+        width={560}
+        height={315}
+        className="w-full rounded-2xl"
       />
 
       <div className="rounded-2xl bg-sage-light/50 p-5">
@@ -149,11 +153,12 @@ export function ProblemStressStep() {
       title="When baby doesn't have a routine, neither do you"
       onNext={nextStep}
     >
-      <ImagePlaceholder
-        emoji="📅"
-        label="Chaos vs order visualization"
-        description="Chaotic day (scattered icons) vs organized day (timeline)"
-        aspectRatio="aspect-[16/9]"
+      <Image
+        src="/chaos-vs-order.png"
+        alt="Chaotic day vs organized routine"
+        width={560}
+        height={315}
+        className="w-full rounded-2xl"
       />
 
       <div className="rounded-2xl bg-teal-light/50 p-5">

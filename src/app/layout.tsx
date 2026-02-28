@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 
 import { type Metadata } from "next";
 import { Comfortaa, Nunito_Sans } from "next/font/google";
+import { Toaster } from "sonner";
 
 const comfortaa = Comfortaa({
   subsets: ["latin"],
@@ -32,6 +33,11 @@ export default function RootLayout({
     >
       <body className="min-h-screen bg-antique font-sans text-charcoal antialiased">
         {children}
+        <Toaster
+          position="top-center"
+          offset={16}
+          toastOptions={{ unstyled: true }}
+        />
       </body>
     </html>
   );

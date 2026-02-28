@@ -23,15 +23,27 @@ export function OptionCard({
   selected,
   onClick,
 }: OptionCardProps) {
+  const prevSelected = useRef(selected);
+  const [popping, setPopping] = useState(false);
+
+  useEffect(() => {
+    if (selected && !prevSelected.current) {
+      setPopping(true);
+      const t = setTimeout(() => setPopping(false), 350);
+      return () => clearTimeout(t);
+    }
+    prevSelected.current = selected;
+  }, [selected]);
+
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`group w-full rounded-2xl border-2 p-4 text-left transition-all duration-200 ${
+      className={`group h-full w-full rounded-2xl border-2 p-4 text-left transition-all duration-200 ${
         selected
           ? "border-teal bg-teal-light shadow-md shadow-teal/10"
           : "border-border bg-surface hover:border-teal/30 hover:shadow-sm"
-      }`}
+      } ${popping ? "animate-selection-pop" : ""}`}
     >
       <div className="flex items-start gap-3">
         {emoji && (
@@ -84,6 +96,18 @@ export function CTAButton({
   disabled,
   variant = "primary",
 }: CTAButtonProps) {
+  const wasDisabled = useRef(disabled);
+  const [glowing, setGlowing] = useState(false);
+
+  useEffect(() => {
+    if (wasDisabled.current && !disabled && variant === "primary") {
+      setGlowing(true);
+      const t = setTimeout(() => setGlowing(false), 800);
+      return () => clearTimeout(t);
+    }
+    wasDisabled.current = disabled;
+  }, [disabled, variant]);
+
   return (
     <button
       type="button"
@@ -93,7 +117,7 @@ export function CTAButton({
         variant === "primary"
           ? "bg-teal text-white shadow-lg shadow-teal/25 hover:bg-teal-dark hover:shadow-xl hover:shadow-teal/30 active:scale-[0.98]"
           : "border-2 border-border bg-surface text-charcoal hover:border-teal/30 hover:bg-antique"
-      }`}
+      } ${glowing ? "animate-glow-once" : ""}`}
     >
       {children}
     </button>

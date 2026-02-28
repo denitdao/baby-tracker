@@ -6,8 +6,11 @@ import {
   useReducer,
   useMemo,
   useCallback,
+  useRef,
   type ReactNode,
 } from "react";
+import { useSearchParams } from "next/navigation";
+import { showAchievement } from "~/components/quiz/AchievementToast";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -20,6 +23,7 @@ export type QuizAnswers = {
   babyBirthday: string | null;
   isNotBornYet: boolean;
   isFirstBorn: boolean | null;
+  babyGender: string | null;
   caregiverRole: string | null;
   parentName: string;
   goals: string[];
@@ -34,6 +38,7 @@ export type StepId =
   | "baby-name"
   | "baby-birthday"
   | "first-born"
+  | "baby-gender"
   | "caregiver"
   | "parent-name"
   | "affirmation"
@@ -73,6 +78,7 @@ export const ALL_STEPS: StepDef[] = [
   { id: "baby-name", phase: 1 },
   { id: "baby-birthday", phase: 1 },
   { id: "first-born", phase: 1 },
+  { id: "baby-gender", phase: 1 },
   { id: "caregiver", phase: 1 },
   { id: "parent-name", phase: 1 },
   { id: "affirmation", phase: 1 },
@@ -135,6 +141,7 @@ const initialState: QuizState = {
     babyBirthday: null,
     isNotBornYet: false,
     isFirstBorn: null,
+    babyGender: null,
     caregiverRole: null,
     parentName: "",
     goals: [],
@@ -188,10 +195,51 @@ type QuizContextType = {
   prevStep: () => void;
 };
 
+const VALID_STEP_IDS = new Set<string>(ALL_STEPS.map((s) => s.id));
+
+const DEV_ANSWERS: QuizAnswers = {
+  valueSelection: "sleep",
+  attribution: "google",
+  babyName: "Luna",
+  babyBirthday: "2025-08-15",
+  isNotBornYet: false,
+  isFirstBorn: true,
+  babyGender: "girl",
+  caregiverRole: "mom",
+  parentName: "Alex",
+  goals: [
+    "night-wakeups",
+    "nap-schedule",
+    "feeding-routine",
+    "growth-milestones",
+    "less-stress",
+  ],
+  biggestStruggle: "nap-timing",
+  email: "alex@example.com",
+  selectedPlan: "yearly",
+};
+
+function getInitialState(stepParam: string | null): QuizState {
+  if (stepParam && VALID_STEP_IDS.has(stepParam)) {
+    return {
+      currentStepId: stepParam as StepId,
+      answers: DEV_ANSWERS,
+      direction: "forward",
+    };
+  }
+  return initialState;
+}
+
 const QuizContext = createContext<QuizContextType | null>(null);
 
 export function QuizProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const searchParams = useSearchParams();
+  const [state, dispatch] = useReducer(
+    reducer,
+    searchParams.get("step"),
+    getInitialState,
+  );
+  const firedAchievements = useRef(new Set<string>());
 
   const activeSteps = useMemo(
     () => ALL_STEPS.filter((s) => !s.condition || s.condition(state.answers)),
@@ -238,15 +286,74 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const fireAchievement = useCallback(
+    (
+      id: string,
+      config: {
+        emoji: string;
+        title: string;
+        description: string;
+        variant?: "teal" | "lavender" | "amber";
+      },
+    ) => {
+      if (firedAchievements.current.has(id)) return;
+      firedAchievements.current.add(id);
+      setTimeout(() => showAchievement(config), 600);
+    },
+    [],
+  );
+
   const nextStep = useCallback(() => {
     const steps = ALL_STEPS.filter(
       (s) => !s.condition || s.condition(state.answers),
     );
     const idx = steps.findIndex((s) => s.id === state.currentStepId);
     const next = steps[idx + 1];
-    if (next)
-      dispatch({ type: "GO_TO", stepId: next.id, direction: "forward" });
-  }, [state.answers, state.currentStepId]);
+    if (!next) return;
+
+    const leavingId = state.currentStepId;
+    const babyName = state.answers.babyName || "your baby";
+    const parentName = state.answers.parentName || "there";
+    const nextProgress = ((idx + 2) / steps.length) * 100;
+
+    if (leavingId === "struggle") {
+      fireAchievement("phase1-done", {
+        emoji: "🌟",
+        title: "Personalization complete!",
+        description: `We already know ${babyName} so well`,
+        variant: "teal",
+      });
+    }
+
+    if (nextProgress >= 50 && ((idx + 1) / steps.length) * 100 < 50) {
+      fireAchievement("halfway", {
+        emoji: "🚀",
+        title: "Halfway there!",
+        description: `You're doing great, ${parentName}`,
+        variant: "lavender",
+      });
+    }
+
+    if (leavingId === "solution-bridge") {
+      fireAchievement("phase2-done", {
+        emoji: "🎓",
+        title: "Routine expert unlocked!",
+        description: "You're officially a baby routine expert",
+        variant: "lavender",
+      });
+    }
+
+    if (leavingId === "email-capture") {
+      fireAchievement("email-captured", {
+        emoji: "📬",
+        title: "Smart move!",
+        description: `${babyName}'s plan is on its way`,
+        variant: "amber",
+      });
+    }
+
+    dispatch({ type: "GO_TO", stepId: next.id, direction: "forward" });
+  }, [state.answers, state.currentStepId, fireAchievement]);
 
   const prevStep = useCallback(() => {
     const steps = ALL_STEPS.filter(

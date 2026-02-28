@@ -8,6 +8,7 @@ import {
   BabyNameStep,
   BabyBirthdayStep,
   FirstBornStep,
+  BabyGenderStep,
   CaregiverStep,
   ParentNameStep,
   AffirmationStep,
@@ -43,6 +44,7 @@ const STEP_COMPONENTS: Record<StepId, React.ComponentType> = {
   "baby-name": BabyNameStep,
   "baby-birthday": BabyBirthdayStep,
   "first-born": FirstBornStep,
+  "baby-gender": BabyGenderStep,
   caregiver: CaregiverStep,
   "parent-name": ParentNameStep,
   affirmation: AffirmationStep,
@@ -125,11 +127,26 @@ export default function QuizContainer() {
               )}
 
               <div className="flex-1">
-                <div className="h-2 overflow-hidden rounded-full bg-border">
+                <div className="relative h-2 rounded-full bg-border">
                   <div
                     className="h-full rounded-full bg-gradient-to-r from-teal to-lavender transition-all duration-500 ease-out"
                     style={{ width: `${progress}%` }}
                   />
+                  {[25, 50, 75].map((m) => (
+                    <div
+                      key={m}
+                      className={`absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface transition-all duration-300 ${
+                        progress >= m
+                          ? "scale-100 bg-amber"
+                          : "scale-75 bg-border"
+                      }`}
+                      style={{ left: `${m}%` }}
+                    >
+                      {progress >= m && progress < m + 5 && (
+                        <span className="absolute inset-0 animate-milestone-pop rounded-full bg-amber/40" />
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -148,7 +165,9 @@ export default function QuizContainer() {
         <div
           key={currentStep.id}
           className={
-            direction === "forward" ? "animate-slide-in" : "animate-fade-in"
+            direction === "forward"
+              ? "animate-slide-in-right"
+              : "animate-slide-in-left"
           }
         >
           <StepComponent />
