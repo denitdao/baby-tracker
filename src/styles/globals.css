@@ -119,11 +119,25 @@ html {
   color: #1f1f2e;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-  opacity: 0.6;
+/* react-day-picker: hide the native dropdown arrows & style the wrapper */
+.rdp-quiz .rdp-dropdown_root {
+  position: relative;
+  display: inline-flex;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
+.rdp-quiz .rdp-dropdown_root select {
+  -webkit-appearance: none;
+  appearance: none;
+  padding-right: 1.25rem;
+}
+
+.rdp-quiz .rdp-dropdown_root .rdp-chevron {
+  position: absolute;
+  right: 0.35rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  width: 12px;
+  height: 12px;
+  color: var(--color-muted);
 }

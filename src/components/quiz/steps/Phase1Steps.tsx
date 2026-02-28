@@ -1,10 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import { useQuiz } from "~/context/QuizContext";
 import {
   OptionCard,
   CTAButton,
   QuizInput,
+  QuizDatePicker,
   StepTitle,
   StepSubtitle,
   ImagePlaceholder,
@@ -132,12 +134,12 @@ export function BabyNameStep() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <ImagePlaceholder
-          emoji="👶"
-          label="Baby mascot illustration"
-          description="Cute mascot character waving"
-          aspectRatio="aspect-square"
-          className="mx-auto mb-6 max-w-[180px]"
+        <Image
+          src="/baby-mascot.png"
+          alt="Cute baby mascot waving"
+          width={180}
+          height={180}
+          className="mx-auto mb-6"
         />
         <StepTitle>Let&apos;s get to know your little one!</StepTitle>
         <StepSubtitle>What&apos;s their name?</StepSubtitle>
@@ -175,8 +177,7 @@ export function BabyBirthdayStep() {
         </StepSubtitle>
       </div>
 
-      <QuizInput
-        type="date"
+      <QuizDatePicker
         value={answers.babyBirthday ?? ""}
         onChange={(v) => setAnswer("babyBirthday", v)}
       />
@@ -290,12 +291,12 @@ export function ParentNameStep() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <ImagePlaceholder
-          emoji="🧑‍🍼"
-          label="Parent mascot illustration"
-          description="Parent mascot character waving"
-          aspectRatio="aspect-square"
-          className="mx-auto mb-6 max-w-[180px]"
+        <Image
+          src="/parent-mascot.png"
+          alt="Parent mascot waving"
+          width={180}
+          height={180}
+          className="mx-auto mb-6"
         />
         <StepTitle>And what&apos;s YOUR name?</StepTitle>
       </div>

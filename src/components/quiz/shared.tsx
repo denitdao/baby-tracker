@@ -1,6 +1,8 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { type ReactNode, useState, useRef, useEffect, useCallback } from "react";
+import { DayPicker } from "react-day-picker";
+import { format, parse, subYears } from "date-fns";
 
 /* ------------------------------------------------------------------ */
 /*  Option Card                                                        */
@@ -126,6 +128,120 @@ export function QuizInput({
       autoFocus={autoFocus}
       className="w-full rounded-2xl border-2 border-border bg-surface px-5 py-4 text-lg text-charcoal transition-all placeholder:text-muted/50 focus:border-teal focus:outline-none focus:ring-4 focus:ring-teal/10"
     />
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Date Picker                                                        */
+/* ------------------------------------------------------------------ */
+
+type QuizDatePickerProps = {
+  value: string;
+  onChange: (iso: string) => void;
+};
+
+const today = new Date();
+
+export function QuizDatePicker({ value, onChange }: QuizDatePickerProps) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  const selected = value ? parse(value, "yyyy-MM-dd", new Date()) : undefined;
+
+  const handleSelect = useCallback(
+    (date: Date | undefined) => {
+      if (!date) return;
+      onChange(format(date, "yyyy-MM-dd"));
+      setOpen(false);
+    },
+    [onChange],
+  );
+
+  useEffect(() => {
+    function onPointerDown(e: PointerEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    if (open) {
+      document.addEventListener("pointerdown", onPointerDown);
+      return () => document.removeEventListener("pointerdown", onPointerDown);
+    }
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className={`flex w-full items-center justify-between rounded-2xl border-2 px-5 py-4 text-lg transition-all ${
+          open
+            ? "border-teal bg-surface ring-4 ring-teal/10"
+            : "border-border bg-surface hover:border-teal/30"
+        } ${selected ? "text-charcoal" : "text-muted/50"}`}
+      >
+        <span>{selected ? format(selected, "MMMM d, yyyy") : "Pick a date"}</span>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="shrink-0 text-muted"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute left-1/2 z-50 mt-2 -translate-x-1/2 rounded-2xl border-2 border-border bg-surface p-3 shadow-xl shadow-charcoal/5">
+          <DayPicker
+            mode="single"
+            selected={selected}
+            onSelect={handleSelect}
+            defaultMonth={selected ?? today}
+            startMonth={subYears(today, 5)}
+            endMonth={today}
+            disabled={{ after: today }}
+            captionLayout="dropdown"
+            classNames={{
+              root: "rdp-quiz",
+              months: "flex flex-col",
+              month: "space-y-3",
+              month_caption: "flex items-center justify-center gap-1 px-1",
+              caption_label: "hidden",
+              dropdowns: "flex items-center gap-1",
+              dropdown: "appearance-none rounded-xl border border-border bg-antique px-2 py-1.5 text-sm font-semibold text-charcoal outline-none focus:border-teal focus:ring-2 focus:ring-teal/10 cursor-pointer",
+              nav: "flex items-center gap-1",
+              button_previous:
+                "inline-flex h-8 w-8 items-center justify-center rounded-full text-muted transition-colors hover:bg-antique hover:text-charcoal",
+              button_next:
+                "inline-flex h-8 w-8 items-center justify-center rounded-full text-muted transition-colors hover:bg-antique hover:text-charcoal",
+              month_grid: "border-collapse",
+              weekdays: "",
+              weekday:
+                "w-9 pb-2 text-center text-xs font-semibold uppercase text-muted/60",
+              week: "",
+              day: "p-0 text-center",
+              day_button:
+                "inline-flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition-all hover:bg-teal-light hover:text-teal-dark",
+              selected:
+                "!bg-teal !text-white shadow-sm shadow-teal/20 hover:!bg-teal-dark",
+              today: "font-bold text-teal",
+              outside: "text-muted/30",
+              disabled: "text-muted/20 cursor-not-allowed hover:bg-transparent",
+              chevron: "h-4 w-4",
+            }}
+          />
+        </div>
+      )}
+    </div>
   );
 }
 

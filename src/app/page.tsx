@@ -136,23 +136,14 @@ export default function LandingPage() {
 
           {/* Hero image placeholder */}
           <div className="relative animate-fade-in [animation-delay:0.3s]">
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-teal-light/60 via-lavender-light/30 to-amber-light/30">
-              <div className="flex aspect-[4/3] items-center justify-center p-8">
-                <div className="text-center">
-                  <div className="mb-4 text-7xl">👶🏻</div>
-                  <div className="inline-block rounded-xl bg-surface/80 px-5 py-3 backdrop-blur-sm">
-                    <p className="font-heading text-sm font-bold text-charcoal/60">
-                      Hero Illustration
-                    </p>
-                    <p className="mt-0.5 text-xs text-muted">
-                      Parent + baby warm illustration
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="pointer-events-none absolute -bottom-12 -right-12 h-40 w-40 rounded-full bg-teal/8" />
-              <div className="pointer-events-none absolute -left-6 -top-6 h-24 w-24 rounded-full bg-lavender/10" />
-            </div>
+            <Image
+              src="/landing.jpg"
+              alt="Parent holding a happy baby"
+              width={600}
+              height={450}
+              className="rounded-3xl"
+              priority
+            />
 
             {/* Floating rating badge */}
             <div className="absolute -bottom-5 -left-3 animate-float rounded-2xl border border-border bg-surface p-3 shadow-lg md:-left-6">

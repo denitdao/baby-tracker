@@ -84,7 +84,7 @@ export default function QuizContainer() {
   const showBack = !isFirstStep && !HIDE_BACK.includes(currentStep.id);
 
   return (
-    <div className="relative min-h-screen bg-antique">
+    <div className="relative min-h-screen overflow-x-hidden bg-antique">
       {/* Subtle dot background */}
       <div
         className="pointer-events-none fixed inset-0 opacity-[0.025]"

@@ -13,6 +13,7 @@ Ad → Landing Page → Quiz (18-22 screens) → "Building Plan" → Results Pre
 ```
 
 **3 phases inside the quiz:**
+
 1. **Personalization** (screens 1–10): Collect data, build emotional investment
 2. **Education + Problem Framing** (screens 11–15): Napper-style "Problem #1, #2" screens that teach WHY they need you
 3. **Promise + Conversion** (screens 16–22): Show personalized results, capture email, paywall
@@ -25,6 +26,7 @@ Ad → Landing Page → Quiz (18-22 screens) → "Building Plan" → Results Pre
 **Subheadline:** "Take a 3-minute quiz — get a personalized routine plan for your baby"
 
 **Elements:**
+
 - Hero: Parent + baby illustration (warm, not clinical)
 - Social proof strip: "Trusted by X parents" · ⭐ 4.8 App Store · "Featured in [publication]"
 - Single CTA button: "Start Free Quiz →"
@@ -39,10 +41,12 @@ Ad → Landing Page → Quiz (18-22 screens) → "Building Plan" → Results Pre
 ## Phase 1: Personalization (Screens 1–10)
 
 ### Screen 1 — Welcome / Value Selection
+>
 > **"Hi there! 👋"**  
 > "Your baby's perfect routine is just a few questions away. What matters most to you right now?"
 >
 > **3 selectable cards** (like Napper's "Hi there!" screen):
+>
 > - 😴 **Better sleep for everyone** — "Fewer night wake-ups, predictable naps"
 > - 📋 **An organized daily routine** — "Know what to do and when, less guessing"
 > - 💪 **Confidence in your baby's growth** — "Track milestones, feeding, development"
@@ -54,6 +58,7 @@ Ad → Landing Page → Quiz (18-22 screens) → "Building Plan" → Results Pre
 ---
 
 ### Screen 2 — Attribution
+>
 > **"How did you find us?"**
 >
 > - TikTok
@@ -71,6 +76,7 @@ Ad → Landing Page → Quiz (18-22 screens) → "Building Plan" → Results Pre
 ---
 
 ### Screen 3 — Baby's Name
+>
 > **"Let's get to know your little one! What's their name?"**
 >
 > Text input with placeholder "Baby's name"  
@@ -83,6 +89,7 @@ Ad → Landing Page → Quiz (18-22 screens) → "Building Plan" → Results Pre
 ---
 
 ### Screen 4 — Baby's Birthday
+>
 > **"When was [name] born?"**  
 > Subtitle: "We need this to calculate the perfect routine ✨"
 >
@@ -96,6 +103,7 @@ Ad → Landing Page → Quiz (18-22 screens) → "Building Plan" → Results Pre
 ---
 
 ### Screen 5 — First-born?
+>
 > **"Is [name] your first baby?"**
 >
 > - Yes
@@ -108,6 +116,7 @@ Ad → Landing Page → Quiz (18-22 screens) → "Building Plan" → Results Pre
 ---
 
 ### Screen 6 — Who are you?
+>
 > **"And who are you to [name]?"**
 >
 > - Mom
@@ -121,6 +130,7 @@ Ad → Landing Page → Quiz (18-22 screens) → "Building Plan" → Results Pre
 ---
 
 ### Screen 7 — Your Name
+>
 > **"And what's YOUR name?"**
 >
 > Text input  
@@ -133,6 +143,7 @@ Ad → Landing Page → Quiz (18-22 screens) → "Building Plan" → Results Pre
 ---
 
 ### Screen 8 — 🎉 Affirmation Screen
+>
 > **"[parent name] + [baby name] — what a team! 🎉"**
 >
 > Illustration: Parent mascot + baby mascot together (like Napper's "Omg! What. A. Team!" screen)  
@@ -145,6 +156,7 @@ Ad → Landing Page → Quiz (18-22 screens) → "Building Plan" → Results Pre
 ---
 
 ### Screen 9 — Goals (multi-select)
+>
 > **"What would make the biggest difference for your family?"**  
 > Subtitle: "Select all that apply"
 >
@@ -168,6 +180,7 @@ Ad → Landing Page → Quiz (18-22 screens) → "Building Plan" → Results Pre
 ---
 
 ### Screen 10 — Current Biggest Struggle
+>
 > **"What's the hardest part of your day with [name] right now?"**
 >
 > - "I never know when [name] should nap"
@@ -193,6 +206,7 @@ The screens shown depend on the user's goal selection from Screen 9. Show 2–3 
 ---
 
 ### Screen 11 — Problem: Sleep Pressure (if sleep goals selected)
+>
 > **Problem #1**  
 > **"Babies don't sleep like adults"**
 >
@@ -206,6 +220,7 @@ The screens shown depend on the user's goal selection from Screen 9. Show 2–3 
 ---
 
 ### Screen 12 — Problem: Feeding Rhythm (if feeding goals selected)
+>
 > **Problem #2**  
 > **"Feeding isn't just about hunger"**
 >
@@ -218,6 +233,7 @@ The screens shown depend on the user's goal selection from Screen 9. Show 2–3 
 ---
 
 ### Screen 13 — Problem: Development Tracking (if milestone goals selected)
+>
 > **Problem #3**  
 > **"Every baby develops at their own pace — but milestones still matter"**
 >
@@ -230,6 +246,7 @@ The screens shown depend on the user's goal selection from Screen 9. Show 2–3 
 ---
 
 ### Screen 14 — Problem: Parental Stress (if stress/energy goals selected)
+>
 > **Problem #4**  
 > **"When baby doesn't have a routine, neither do you"**
 >
@@ -242,11 +259,13 @@ The screens shown depend on the user's goal selection from Screen 9. Show 2–3 
 ---
 
 ### Screen 15 — Solution Bridge / Promise Screen
+>
 > **"Here's the good news, [parent name] 💛"**
 >
 > **"A personalized routine changes everything."**
 >
 > "Based on [name]'s age ([calculated age]), we can calculate:"
+>
 > - ✅ Optimal wake windows and nap times
 > - ✅ The right feeding rhythm for [name]'s stage
 > - ✅ Which milestones to watch for this month
@@ -263,8 +282,9 @@ The screens shown depend on the user's goal selection from Screen 9. Show 2–3 
 ## Phase 3: Promise + Conversion (Screens 16–22)
 
 ### Screen 16 — "Building Your Plan" Loading Screen
+>
 > Animated progress screen (3–5 seconds):
-> 
+>
 > "Analyzing [name]'s age and stage..."  
 > "Calculating optimal wake windows..."  
 > "Building feeding schedule..."  
@@ -279,9 +299,11 @@ The screens shown depend on the user's goal selection from Screen 9. Show 2–3 
 ---
 
 ### Screen 17 — Personalized Results Preview
+>
 > **"[name]'s Optimized Daily Routine"**
 >
 > Visual daily timeline showing:
+>
 > - 🌅 7:00 AM — Wake up
 > - 🍼 7:15 AM — Morning feed
 > - 😴 9:00 AM — Nap 1 (1.5 hrs)
@@ -301,9 +323,11 @@ The screens shown depend on the user's goal selection from Screen 9. Show 2–3 
 ---
 
 ### Screen 18 — Social Proof
+>
 > **"Join [X] parents already using personalized routines"**
 >
 > 3 testimonial cards:
+>
 > - ⭐⭐⭐⭐⭐ "Within a week, [daughter] went from 4 wake-ups to 1. I finally feel like myself again." — Sarah, mom of 6-month-old
 > - ⭐⭐⭐⭐⭐ "I stopped second-guessing everything. The routine just works." — James, first-time dad
 > - ⭐⭐⭐⭐⭐ "The feeding + sleep tracking together is what makes this different." — Maria, mom of 2
@@ -315,6 +339,7 @@ The screens shown depend on the user's goal selection from Screen 9. Show 2–3 
 ---
 
 ### Screen 19 — Email Capture
+>
 > **"Where should we send [name]'s routine plan?"**
 >
 > Email input field  
@@ -328,6 +353,7 @@ The screens shown depend on the user's goal selection from Screen 9. Show 2–3 
 ---
 
 ### Screen 20 — Paywall
+>
 > **"Start [name]'s personalized routine today"**
 >
 > **Trial explanation strip:**  
@@ -346,6 +372,7 @@ The screens shown depend on the user's goal selection from Screen 9. Show 2–3 
 > **Yearly pre-selected by default**
 >
 > **What's included:**
+>
 > - ✅ [name]'s full personalized routine
 > - ✅ Smart sleep & feeding tracker
 > - ✅ Weekly milestone alerts for [age range]
@@ -383,9 +410,11 @@ The screens shown depend on the user's goal selection from Screen 9. Show 2–3 
 ---
 
 ### Screen 22 — Post-Quiz Thank You (web page)
+>
 > "Check your email! We just sent [name]'s routine overview to [email]."
 >
 > **While you wait:**
+>
 > - 📱 Download the app → [links]
 > - 📖 Read: "5 signs your baby's sleep schedule needs adjusting"
 > - 👥 Join our parent community
@@ -423,12 +452,14 @@ The screens shown depend on the user's goal selection from Screen 9. Show 2–3 
 ## Technical Implementation Notes
 
 **Recommended tools for building web quiz funnel:**
+
 - **FunnelFox** — purpose-built for subscription app web funnels, A/B testing included
 - **Typeform / Outgrow** — if you want fast MVP quiz without custom dev
 - **Custom build** (Next.js + Vercel) — most control, best for later optimization
 - **Adapty / RevenueCat** — for web paywall + subscription management that syncs with app
 
 **Analytics to track:**
+
 - Landing page → quiz start rate (target: 40–60%)
 - Quiz start → completion rate (target: 50–70%)
 - Quiz completion → email capture rate (target: 60–80%)
