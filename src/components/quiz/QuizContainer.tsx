@@ -78,15 +78,14 @@ const HIDE_BACK: StepId[] = [
 /* ------------------------------------------------------------------ */
 
 export default function QuizContainer() {
-  const { currentStep, progress, isFirstStep, prevStep, direction } =
-    useQuiz();
+  const { currentStep, progress, isFirstStep, prevStep, direction } = useQuiz();
 
   const StepComponent = STEP_COMPONENTS[currentStep.id];
   const showProgress = !HIDE_PROGRESS.includes(currentStep.id);
   const showBack = !isFirstStep && !HIDE_BACK.includes(currentStep.id);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-antique">
+    <div className="bg-antique relative min-h-screen overflow-x-hidden">
       {/* Subtle dot background */}
       <div
         className="pointer-events-none fixed inset-0 opacity-[0.025]"
@@ -99,14 +98,14 @@ export default function QuizContainer() {
 
       {/* Progress header */}
       {showProgress && (
-        <div className="fixed left-0 right-0 top-0 z-50 border-b border-border/50 bg-surface/80 backdrop-blur-md">
+        <div className="border-border/50 bg-surface/80 fixed top-0 right-0 left-0 z-50 border-b backdrop-blur-md">
           <div className="mx-auto max-w-xl px-4 py-3">
             <div className="flex items-center gap-3">
               {showBack ? (
                 <button
                   type="button"
                   onClick={prevStep}
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-antique hover:text-charcoal"
+                  className="text-muted hover:bg-antique hover:text-charcoal flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors"
                   aria-label="Go back"
                 >
                   <svg
@@ -127,30 +126,30 @@ export default function QuizContainer() {
               )}
 
               <div className="flex-1">
-                <div className="relative h-2 rounded-full bg-border">
+                <div className="bg-border relative h-2 rounded-full">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-teal to-lavender transition-all duration-500 ease-out"
+                    className="from-teal to-lavender h-full rounded-full bg-gradient-to-r transition-all duration-500 ease-out"
                     style={{ width: `${progress}%` }}
                   />
                   {[25, 50, 75].map((m) => (
                     <div
                       key={m}
-                      className={`absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface transition-all duration-300 ${
+                      className={`border-surface absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 transition-all duration-300 ${
                         progress >= m
-                          ? "scale-100 bg-amber"
-                          : "scale-75 bg-border"
+                          ? "bg-amber scale-100"
+                          : "bg-border scale-75"
                       }`}
                       style={{ left: `${m}%` }}
                     >
                       {progress >= m && progress < m + 5 && (
-                        <span className="absolute inset-0 animate-milestone-pop rounded-full bg-amber/40" />
+                        <span className="animate-milestone-pop bg-amber/40 absolute inset-0 rounded-full" />
                       )}
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="w-10 text-right text-xs tabular-nums text-muted">
+              <div className="text-muted w-10 text-right text-xs tabular-nums">
                 {Math.round(progress)}%
               </div>
             </div>

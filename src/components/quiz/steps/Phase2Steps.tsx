@@ -23,10 +23,10 @@ function ProblemLayout({
   return (
     <div className="space-y-6">
       <div>
-        <div className="mb-3 inline-block rounded-full bg-lavender-light px-3.5 py-1 text-sm font-bold text-lavender-dark">
+        <div className="bg-lavender-light text-lavender-dark mb-3 inline-block rounded-full px-3.5 py-1 text-sm font-bold">
           Problem #{problemNumber}
         </div>
-        <h2 className="font-heading text-2xl font-bold leading-tight text-charcoal md:text-3xl">
+        <h2 className="font-heading text-charcoal text-2xl leading-tight font-bold md:text-3xl">
           {title}
         </h2>
       </div>
@@ -58,11 +58,11 @@ export function ProblemSleepStep() {
         className="w-full rounded-2xl"
       />
 
-      <div className="rounded-2xl bg-lavender-light/50 p-5">
-        <p className="leading-relaxed text-charcoal/80">
-          Adults build sleep pressure over a full day.{" "}
-          {babyDisplayName}&apos;s battery drains in just{" "}
-          <span className="font-semibold text-charcoal">1–3 hours</span>{" "}
+      <div className="bg-lavender-light/50 rounded-2xl p-5">
+        <p className="text-charcoal/80 leading-relaxed">
+          Adults build sleep pressure over a full day. {babyDisplayName}&apos;s
+          battery drains in just{" "}
+          <span className="text-charcoal font-semibold">1–3 hours</span>{" "}
           {ageText}. Missing the right window by even 20 minutes can mean an
           overtired, cranky baby — and a stressful night for you.
         </p>
@@ -93,8 +93,8 @@ export function ProblemFeedingStep() {
         className="w-full rounded-2xl"
       />
 
-      <div className="rounded-2xl bg-amber-light/50 p-5">
-        <p className="leading-relaxed text-charcoal/80">
+      <div className="bg-amber-light/50 rounded-2xl p-5">
+        <p className="text-charcoal/80 leading-relaxed">
           {babyDisplayName}&apos;s feeding schedule directly affects sleep
           quality and mood. {ageText}, most babies need timed feeds around wake
           windows — not just when they cry.
@@ -126,12 +126,10 @@ export function ProblemDevelopmentStep() {
         className="w-full rounded-2xl"
       />
 
-      <div className="rounded-2xl bg-sage-light/50 p-5">
-        <p className="leading-relaxed text-charcoal/80">
+      <div className="bg-sage-light/50 rounded-2xl p-5">
+        <p className="text-charcoal/80 leading-relaxed">
           {ageText}, {babyDisplayName} is in a critical development window.{" "}
-          <span className="font-semibold text-charcoal">
-            73% of parents
-          </span>{" "}
+          <span className="text-charcoal font-semibold">73% of parents</span>{" "}
           worry they&apos;re missing something. The key is knowing what to look
           for — and when.
         </p>
@@ -161,12 +159,10 @@ export function ProblemStressStep() {
         className="w-full rounded-2xl"
       />
 
-      <div className="rounded-2xl bg-teal-light/50 p-5">
-        <p className="leading-relaxed text-charcoal/80">
+      <div className="bg-teal-light/50 rounded-2xl p-5">
+        <p className="text-charcoal/80 leading-relaxed">
           New parents lose an average of{" "}
-          <span className="font-semibold text-charcoal">
-            44 days of sleep
-          </span>{" "}
+          <span className="text-charcoal font-semibold">44 days of sleep</span>{" "}
           in the first year. But it&apos;s not just about sleep — it&apos;s the
           unpredictability. When you don&apos;t know what&apos;s coming next,
           every hour feels harder than it needs to.
@@ -194,10 +190,10 @@ export function SolutionBridgeStep() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-heading text-2xl font-bold text-charcoal md:text-3xl">
+        <h2 className="font-heading text-charcoal text-2xl font-bold md:text-3xl">
           Here&apos;s the good news, {parentDisplayName} 💛
         </h2>
-        <p className="mt-3 font-heading text-xl font-semibold text-teal">
+        <p className="font-heading text-teal mt-3 text-xl font-semibold">
           A personalized routine changes everything.
         </p>
       </div>
@@ -211,10 +207,10 @@ export function SolutionBridgeStep() {
         {benefits.map((b, i) => (
           <div
             key={i}
-            className="flex animate-slide-up items-start gap-3 rounded-xl bg-sage-light/40 p-3.5"
+            className="animate-slide-up bg-sage-light/40 flex items-start gap-3 rounded-xl p-3.5"
             style={{ animationDelay: `${i * 0.12}s` }}
           >
-            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage text-xs text-white">
+            <span className="bg-sage mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs text-white">
               ✓
             </span>
             <span className="text-charcoal">{b}</span>
@@ -222,9 +218,9 @@ export function SolutionBridgeStep() {
         ))}
       </div>
 
-      <div className="rounded-2xl bg-amber-light/50 p-4 text-center">
-        <p className="text-sm font-medium text-charcoal/80">
-          <span className="font-bold text-charcoal">87%</span> of parents who
+      <div className="bg-amber-light/50 rounded-2xl p-4 text-center">
+        <p className="text-charcoal/80 text-sm font-medium">
+          <span className="text-charcoal font-bold">87%</span> of parents who
           follow a personalized routine report better sleep within 2 weeks.
         </p>
       </div>

@@ -189,7 +189,7 @@ export function BabyBirthdayStep() {
           setAnswer("isNotBornYet", true);
           nextStep();
         }}
-        className="w-full text-center text-sm text-teal hover:underline"
+        className="text-teal w-full text-center text-sm hover:underline"
       >
         My baby is not born yet
       </button>
@@ -226,7 +226,7 @@ export function FirstBornStep() {
             onClick={() => setAnswer("isFirstBorn", opt.value)}
             className={`rounded-2xl border-2 py-6 text-center text-lg font-semibold transition-all ${
               answers.isFirstBorn === opt.value
-                ? "border-teal bg-teal-light text-teal shadow-md shadow-teal/10"
+                ? "border-teal bg-teal-light text-teal shadow-teal/10 shadow-md"
                 : "border-border bg-surface text-charcoal hover:border-teal/30"
             }`}
           >
@@ -372,16 +372,16 @@ export function AffirmationStep() {
   return (
     <div className="space-y-8 text-center">
       <div className="animate-bounce-soft">
-        <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-amber-light text-5xl">
+        <div className="bg-amber-light mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full text-5xl">
           🎉
         </div>
       </div>
 
       <div>
-        <h2 className="font-heading text-3xl font-bold text-charcoal">
+        <h2 className="font-heading text-charcoal text-3xl font-bold">
           {parentName} + {babyName}
         </h2>
-        <p className="mt-1 font-heading text-xl text-teal">What a team!</p>
+        <p className="font-heading text-teal mt-1 text-xl">What a team!</p>
       </div>
 
       <Image
@@ -480,7 +480,7 @@ export function GoalsStep() {
       <button
         type="button"
         onClick={nextStep}
-        className="w-full text-center text-sm text-muted hover:text-teal"
+        className="text-muted hover:text-teal w-full text-center text-sm"
       >
         Skip for now
       </button>

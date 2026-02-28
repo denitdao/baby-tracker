@@ -1,6 +1,12 @@
 "use client";
 
-import { type ReactNode, useState, useRef, useEffect, useCallback } from "react";
+import {
+  type ReactNode,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
 import { DayPicker } from "react-day-picker";
 import { format, parse, subYears } from "date-fns";
 
@@ -41,7 +47,7 @@ export function OptionCard({
       onClick={onClick}
       className={`group h-full w-full rounded-2xl border-2 p-4 text-left transition-all duration-200 ${
         selected
-          ? "border-teal bg-teal-light shadow-md shadow-teal/10"
+          ? "border-teal bg-teal-light shadow-teal/10 shadow-md"
           : "border-border bg-surface hover:border-teal/30 hover:shadow-sm"
       } ${popping ? "animate-selection-pop" : ""}`}
     >
@@ -50,9 +56,9 @@ export function OptionCard({
           <span className="shrink-0 text-2xl leading-none">{emoji}</span>
         )}
         <div className="min-w-0 flex-1">
-          <div className="font-semibold text-charcoal">{label}</div>
+          <div className="text-charcoal font-semibold">{label}</div>
           {description && (
-            <div className="mt-0.5 text-sm text-muted">{description}</div>
+            <div className="text-muted mt-0.5 text-sm">{description}</div>
           )}
         </div>
         <div
@@ -115,8 +121,8 @@ export function CTAButton({
       disabled={disabled}
       className={`w-full rounded-full py-4 text-lg font-bold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-40 ${
         variant === "primary"
-          ? "bg-teal text-white shadow-lg shadow-teal/25 hover:bg-teal-dark hover:shadow-xl hover:shadow-teal/30 active:scale-[0.98]"
-          : "border-2 border-border bg-surface text-charcoal hover:border-teal/30 hover:bg-antique"
+          ? "bg-teal shadow-teal/25 hover:bg-teal-dark hover:shadow-teal/30 text-white shadow-lg hover:shadow-xl active:scale-[0.98]"
+          : "border-border bg-surface text-charcoal hover:border-teal/30 hover:bg-antique border-2"
       } ${glowing ? "animate-glow-once" : ""}`}
     >
       {children}
@@ -150,7 +156,7 @@ export function QuizInput({
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
       autoFocus={autoFocus}
-      className="w-full rounded-2xl border-2 border-border bg-surface px-5 py-4 text-lg text-charcoal transition-all placeholder:text-muted/50 focus:border-teal focus:outline-none focus:ring-4 focus:ring-teal/10"
+      className="border-border bg-surface text-charcoal placeholder:text-muted/50 focus:border-teal focus:ring-teal/10 w-full rounded-2xl border-2 px-5 py-4 text-lg transition-all focus:ring-4 focus:outline-none"
     />
   );
 }
@@ -200,11 +206,13 @@ export function QuizDatePicker({ value, onChange }: QuizDatePickerProps) {
         onClick={() => setOpen((o) => !o)}
         className={`flex w-full items-center justify-between rounded-2xl border-2 px-5 py-4 text-lg transition-all ${
           open
-            ? "border-teal bg-surface ring-4 ring-teal/10"
+            ? "border-teal bg-surface ring-teal/10 ring-4"
             : "border-border bg-surface hover:border-teal/30"
         } ${selected ? "text-charcoal" : "text-muted/50"}`}
       >
-        <span>{selected ? format(selected, "MMMM d, yyyy") : "Pick a date"}</span>
+        <span>
+          {selected ? format(selected, "MMMM d, yyyy") : "Pick a date"}
+        </span>
         <svg
           width="20"
           height="20"
@@ -214,7 +222,7 @@ export function QuizDatePicker({ value, onChange }: QuizDatePickerProps) {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="shrink-0 text-muted"
+          className="text-muted shrink-0"
         >
           <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
           <line x1="16" y1="2" x2="16" y2="6" />
@@ -224,7 +232,7 @@ export function QuizDatePicker({ value, onChange }: QuizDatePickerProps) {
       </button>
 
       {open && (
-        <div className="absolute left-1/2 z-50 mt-2 -translate-x-1/2 rounded-2xl border-2 border-border bg-surface p-3 shadow-xl shadow-charcoal/5">
+        <div className="border-border bg-surface shadow-charcoal/5 absolute left-1/2 z-50 mt-2 -translate-x-1/2 rounded-2xl border-2 p-3 shadow-xl">
           <DayPicker
             mode="single"
             selected={selected}
@@ -241,7 +249,8 @@ export function QuizDatePicker({ value, onChange }: QuizDatePickerProps) {
               month_caption: "flex items-center justify-center gap-1 px-1",
               caption_label: "hidden",
               dropdowns: "flex items-center gap-1",
-              dropdown: "appearance-none rounded-xl border border-border bg-antique px-2 py-1.5 text-sm font-semibold text-charcoal outline-none focus:border-teal focus:ring-2 focus:ring-teal/10 cursor-pointer",
+              dropdown:
+                "appearance-none rounded-xl border border-border bg-antique px-2 py-1.5 text-sm font-semibold text-charcoal outline-none focus:border-teal focus:ring-2 focus:ring-teal/10 cursor-pointer",
               nav: "flex items-center gap-1",
               button_previous:
                 "inline-flex h-8 w-8 items-center justify-center rounded-full text-muted transition-colors hover:bg-antique hover:text-charcoal",
@@ -290,15 +299,15 @@ export function ImagePlaceholder({
 }: ImagePlaceholderProps) {
   return (
     <div
-      className={`${aspectRatio} flex items-center justify-center overflow-hidden rounded-3xl border-2 border-dashed border-teal/20 bg-gradient-to-br from-teal-light/40 to-lavender-light/20 ${className}`}
+      className={`${aspectRatio} border-teal/20 from-teal-light/40 to-lavender-light/20 flex items-center justify-center overflow-hidden rounded-3xl border-2 border-dashed bg-gradient-to-br ${className}`}
     >
       <div className="p-6 text-center">
         <div className="mx-auto mb-3 text-4xl">{emoji}</div>
-        <p className="font-heading text-sm font-semibold text-charcoal/50">
+        <p className="font-heading text-charcoal/50 text-sm font-semibold">
           {label}
         </p>
         {description && (
-          <p className="mt-1 text-xs text-muted">{description}</p>
+          <p className="text-muted mt-1 text-xs">{description}</p>
         )}
       </div>
     </div>
@@ -311,12 +320,12 @@ export function ImagePlaceholder({
 
 export function StepTitle({ children }: { children: ReactNode }) {
   return (
-    <h2 className="font-heading text-2xl font-bold leading-tight text-charcoal md:text-3xl">
+    <h2 className="font-heading text-charcoal text-2xl leading-tight font-bold md:text-3xl">
       {children}
     </h2>
   );
 }
 
 export function StepSubtitle({ children }: { children: ReactNode }) {
-  return <p className="mt-2 text-muted">{children}</p>;
+  return <p className="text-muted mt-2">{children}</p>;
 }

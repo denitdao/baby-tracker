@@ -27,11 +27,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      className={`${comfortaa.variable} ${nunitoSans.variable}`}
-    >
-      <body className="min-h-screen bg-antique font-sans text-charcoal antialiased">
+    <html lang="en" className={`${comfortaa.variable} ${nunitoSans.variable}`}>
+      <body className="bg-antique text-charcoal min-h-screen font-sans antialiased">
         {children}
         <Toaster
           position="top-center"

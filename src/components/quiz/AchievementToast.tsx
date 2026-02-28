@@ -29,21 +29,16 @@ function AchievementContent({
     >
       <span className="mt-0.5 text-2xl leading-none">{emoji}</span>
       <div className="min-w-0">
-        <p className="font-heading text-sm font-bold text-charcoal">
-          {title}
-        </p>
-        <p className="mt-0.5 text-xs text-muted">{description}</p>
+        <p className="font-heading text-charcoal text-sm font-bold">{title}</p>
+        <p className="text-muted mt-0.5 text-xs">{description}</p>
       </div>
     </div>
   );
 }
 
 export function showAchievement(config: AchievementConfig) {
-  toast.custom(
-    () => <AchievementContent {...config} />,
-    {
-      duration: 3000,
-      position: "top-center",
-    },
-  );
+  toast.custom(() => <AchievementContent {...config} />, {
+    duration: 3000,
+    position: "top-center",
+  });
 }
