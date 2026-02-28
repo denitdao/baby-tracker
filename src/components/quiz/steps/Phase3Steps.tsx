@@ -199,7 +199,7 @@ export function ResultsPreviewStep() {
       {/* Timeline */}
       <div className="border-border bg-surface relative rounded-2xl border p-4">
         {/* Vertical timeline line */}
-        <div className="bg-border absolute top-4 bottom-4 left-[29px] w-0.5" />
+        <div className="bg-border absolute top-4 bottom-4 left-[35px] w-0.5" />
 
         <div className="relative space-y-1">
           {SCHEDULE.map((item, i) => {

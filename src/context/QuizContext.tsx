@@ -219,13 +219,19 @@ const DEV_ANSWERS: QuizAnswers = {
   selectedPlan: "yearly",
 };
 
-function getInitialState(stepParam: string | null): QuizState {
-  if (stepParam && VALID_STEP_IDS.has(stepParam)) {
+function getInitialState(params: {
+  step: string | null;
+  prefill: boolean;
+}): QuizState {
+  if (params.step && VALID_STEP_IDS.has(params.step)) {
     return {
-      currentStepId: stepParam as StepId,
+      currentStepId: params.step as StepId,
       answers: DEV_ANSWERS,
       direction: "forward",
     };
+  }
+  if (params.prefill) {
+    return { ...initialState, answers: DEV_ANSWERS };
   }
   return initialState;
 }
@@ -236,7 +242,10 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   const searchParams = useSearchParams();
   const [state, dispatch] = useReducer(
     reducer,
-    searchParams.get("step"),
+    {
+      step: searchParams.get("step"),
+      prefill: searchParams.has("prefill"),
+    },
     getInitialState,
   );
   const firedAchievements = useRef(new Set<string>());

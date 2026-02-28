@@ -149,6 +149,12 @@ export function QuizInput({
   type = "text",
   autoFocus,
 }: QuizInputProps) {
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setTimeout(() => {
+      e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 300);
+  };
+
   return (
     <input
       type={type}
@@ -156,6 +162,7 @@ export function QuizInput({
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
       autoFocus={autoFocus}
+      onFocus={handleFocus}
       className="border-border bg-surface text-charcoal placeholder:text-muted/50 focus:border-teal focus:ring-teal/10 w-full rounded-2xl border-2 px-5 py-4 text-lg transition-all focus:ring-4 focus:outline-none"
     />
   );

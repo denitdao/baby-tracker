@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useQuiz, type StepId } from "~/context/QuizContext";
 
 import {
@@ -80,6 +81,10 @@ const HIDE_BACK: StepId[] = [
 export default function QuizContainer() {
   const { currentStep, progress, isFirstStep, prevStep, direction } = useQuiz();
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [currentStep.id]);
+
   const StepComponent = STEP_COMPONENTS[currentStep.id];
   const showProgress = !HIDE_PROGRESS.includes(currentStep.id);
   const showBack = !isFirstStep && !HIDE_BACK.includes(currentStep.id);
@@ -159,7 +164,7 @@ export default function QuizContainer() {
 
       {/* Step content */}
       <div
-        className={`mx-auto max-w-xl px-4 pb-12 ${showProgress ? "pt-20" : "pt-8"}`}
+        className={`mx-auto max-w-xl px-4 pb-48 ${showProgress ? "pt-20" : "pt-8"}`}
       >
         <div
           key={currentStep.id}
